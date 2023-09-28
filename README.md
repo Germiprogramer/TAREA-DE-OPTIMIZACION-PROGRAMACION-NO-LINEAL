@@ -1,5 +1,9 @@
 # TAREA-DE-OPTIMIZACION-PROGRAMACION-NO-LINEAL
 
+Miembros del grupo: Germán Llorente y Carlos Puigserver
+
+El link al repositorio es el siguiente: https://github.com/Germiprogramer/TAREA-DE-OPTIMIZACION-PROGRAMACION-NO-LINEAL.git
+
 A continuación, desarrollaremos una propuesta teórica para explicar cómo este modelo de atribución basado en programación no lineal podría abordar el problema de los rendimientos decrecientes y maximizar el ROI. Esta propuesta se basará en el código proporcionado y destacará los pasos clave del proceso:
 
 # Propuesta Teórica del Modelo de Atribución con Programación No Lineal:
@@ -45,6 +49,76 @@ Toma de Decisiones Basada en Datos: Proporciona una base sólida y cuantitativa 
 Velocidad y Eficiencia: A través de la programación no lineal, el modelo puede encontrar la solución óptima de manera rápida y eficiente, incluso en entornos con múltiples canales y datos voluminosos. En comparación con otro tipo de estrategias como los cálculos a mano, es una técnica mucho más óptima.
 
 En resumen, este modelo de atribución basado en programación no lineal es una poderosa herramienta para ayudar a las empresas a tomar decisiones informadas sobre la asignación de su presupuesto de marketing, teniendo en cuenta los rendimientos decrecientes y maximizando el ROI.
+
+# CÓDIGO DEL PROBLEMA PROPUESTO
+
+    import cvxpy as cp
+    import numpy as np
+    
+    # Datos históricos de inversiones y conversiones para cada canal (ejemplo ficticio)
+    historical_investments = np.array([50000, 30000, 20000])  # Inversiones en Google Ads, Facebook Ads, Twitter Ads
+    historical_conversions = np.array([100, 50, 30])  # Conversiones atribuibles a cada canal
+    
+    # Parámetros de las curvas de respuesta
+    alphas = np.array([-9453.72, -8312.84, -7371.33])
+    betas = np.array([8256.21, 7764.20, 7953.36])
+    
+    # Presupuesto total disponible
+    total_budget = 100000
+    
+    # Variables de decisión (presupuesto asignado a cada canal)
+    google_budget = cp.Variable(pos=True)
+    facebook_budget = cp.Variable(pos=True)
+    twitter_budget = cp.Variable(pos=True)
+    
+    # Restricción de presupuesto total
+    budget_constraint = [google_budget + facebook_budget + twitter_budget <= total_budget]
+    
+    #Graficar la curva de respuesta de cada canal
+    
+    import matplotlib.pyplot as plt
+    
+    # Plot the response curves
+    x = np.linspace(0, 100000, 100000)
+    
+    fig = plt.figure(figsize=(10, 5), dpi=300)
+    plt.plot(x, alphas[0] + betas[0] * np.log(x), color='red', label='Google Ads')
+    plt.plot(x, alphas[1] + betas[1] * np.log(x), color='blue', label='Facebook Ads')
+    plt.plot(x, alphas[2] + betas[2] * np.log(x), color='green', label='Twitter Ads')
+    plt.xlabel('Budget ($)')
+    plt.ylabel('Returns ($)') 
+    plt.legend()
+    plt.show()
+    
+    # Función objetivo: Maximizar el ROI
+    roi = (
+        alphas[0] + betas[0] * cp.log(google_budget) +
+        alphas[1] + betas[1] * cp.log(facebook_budget) +
+        alphas[2] + betas[2] * cp.log(twitter_budget)
+    )
+    objective = cp.Maximize(roi)
+    
+    # Crear el problema de optimización
+    problem = cp.Problem(objective, budget_constraint)
+    
+    # Resolver el problema
+    problem.solve(solver=cp.ECOS)
+    
+    # Resultados
+    if problem.status == cp.OPTIMAL:
+        optimal_google_budget = google_budget.value
+        optimal_facebook_budget = facebook_budget.value
+        optimal_twitter_budget = twitter_budget.value
+        optimal_roi = roi.value
+        print("Presupuesto Óptimo:")
+        print(f"Google Ads: ${optimal_google_budget:.2f}")
+        print(f"Facebook Ads: ${optimal_facebook_budget:.2f}")
+        print(f"Twitter Ads: ${optimal_twitter_budget:.2f}")
+        print(f"ROI Óptimo: {optimal_roi:.2f}")
+    else:
+    print("No se pudo encontrar una solución óptima.")
+
+
 
 
 
