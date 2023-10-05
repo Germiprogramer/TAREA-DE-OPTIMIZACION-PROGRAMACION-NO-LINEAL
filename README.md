@@ -4,123 +4,121 @@ Miembros del grupo: Germán Llorente y Carlos Puigserver
 
 El link al repositorio es el siguiente: https://github.com/Germiprogramer/TAREA-DE-OPTIMIZACION-PROGRAMACION-NO-LINEAL.git
 
-A continuación, desarrollaremos una propuesta teórica para explicar cómo este modelo de atribución basado en programación no lineal podría abordar el problema de los rendimientos decrecientes y maximizar el ROI. Esta propuesta se basará en el código proporcionado y destacará los pasos clave del proceso:
-
 # Propuesta Teórica del Modelo de Atribución con Programación No Lineal:
 
-Objetivo Principal:
-Maximizar el Retorno de la Inversión (ROI) al asignar el presupuesto de marketing a través de múltiples canales de manera óptima, teniendo en cuenta los rendimientos decrecientes inherentes a los diferentes canales. Entiéndase el ROI como la medición que permite saber cuánto dinero se obtiene en relación con el dinero que ha sido invertido en el lanzamiento de un producto o la mejora del servicio al cliente o en una campaña de publicidad. Esta métrica puede ser negativa o positiva y refleja el éxito al recuperar el dinero que se ha apostado en un negocio.
+A continuación, desarrollaremos una propuesta teórica para explicar cómo este modelo de atribución basado en programación no lineal podría abordar el problema de los rendimientos decrecientes y maximizar el ROI. Esta propuesta se basará en el código proporcionado y destacará los pasos clave del proceso:
 
-# Pasos Clave del Modelo:
+Supongamos que tienes un presupuesto total de $100,000 para invertir en publicidad para estos productos. Además, tienes datos históricos de inversiones y conversiones para tres canales de marketing (Google Ads, Facebook Ads y Twitter Ads) para estos productos. Los datos históricos son los siguientes:
 
-# 1. Modelado de las Curvas de Respuesta:
+Para Google Ads:
 
-En primer lugar, el modelo utiliza los datos históricos de inversiones y conversiones para cada canal de marketing. Cabe destacar que todos los datos son ficticios o sacados del enunciado de la tarea.
-Luego, se modelan las curvas de respuesta para cada canal, utilizando los parámetros alfa y beta. Estas curvas representan cómo el rendimiento (conversiones) varía en función del presupuesto asignado. En el código proporcionado, estas curvas se han graficado para Google Ads, Facebook Ads y Twitter Ads.
+Inversiones históricas: $50,000
+Conversiones atribuibles: 100
 
-# 2. Definición del Problema de Optimización:
+Para Facebook Ads:
 
-El modelo formula un problema de optimización no lineal en el que las variables de decisión son los presupuestos asignados a cada canal de marketing: google_budget, facebook_budget y twitter_budget.
-El objetivo principal es maximizar el ROI total, que se calcula utilizando las curvas de respuesta modeladas y los presupuestos asignados a cada canal.
+Inversiones históricas: $30,000
+Conversiones atribuibles: 60
+Para Twitter Ads:
 
-# 3. Restricción de Presupuesto Total:
+Inversiones históricas: $20,000
+Conversiones atribuibles: 40
 
-Para asegurarse de que la asignación de presupuesto sea realista, se establece una restricción que limita la suma de los presupuestos asignados a todos los canales a no superar el presupuesto total disponible.
-
-# 4. Resolución del Problema de Optimización:
-
-El modelo utiliza la biblioteca CVXPY para resolver el problema de optimización. CVXPY se encarga de encontrar la asignación óptima de presupuesto que maximiza el ROI, cumpliendo con la restricción de presupuesto.
-
-# 5. Evaluación de Resultados:
-
-Después de resolver el problema de optimización, el modelo evalúa el estado de la solución. Si se encuentra una solución óptima, se obtiene la asignación de presupuesto óptima y el ROI óptimo para cada canal de marketing.
-Estos resultados proporcionan a las empresas una guía clara sobre cómo distribuir su presupuesto de marketing para maximizar el ROI en función de las curvas de respuesta y los datos históricos.
-
-# Beneficios del Modelo de Atribución con Programación No Lineal:
-
-Gestión de Rendimientos Decrecientes: El modelo tiene en cuenta las curvas de respuesta no lineales, lo que significa que asigna más presupuesto inicialmente a los canales que generan mayores retornos, evitando el desperdicio de recursos en canales con rendimientos decrecientes.
-
-Maximización del ROI: Al optimizar la asignación de presupuesto, el modelo busca maximizar el ROI general de la estrategia de marketing, lo que conduce a una utilización más eficiente de los recursos financieros.
-
-Flexibilidad y Adaptabilidad: El modelo puede adaptarse a cambios en el entorno de marketing y a nuevas tendencias. Se ajusta automáticamente en función de los datos más recientes y el rendimiento observado.
-
-Toma de Decisiones Basada en Datos: Proporciona una base sólida y cuantitativa para la toma de decisiones en marketing, lo que permite a las empresas asignar recursos de manera estratégica y fundamentada.
-
-Velocidad y Eficiencia: A través de la programación no lineal, el modelo puede encontrar la solución óptima de manera rápida y eficiente, incluso en entornos con múltiples canales y datos voluminosos. En comparación con otro tipo de estrategias como los cálculos a mano, es una técnica mucho más óptima.
-
-En resumen, este modelo de atribución basado en programación no lineal es una poderosa herramienta para ayudar a las empresas a tomar decisiones informadas sobre la asignación de su presupuesto de marketing, teniendo en cuenta los rendimientos decrecientes y maximizando el ROI.
-
-# CÓDIGO DEL PROBLEMA PROPUESTO
-
-    import cvxpy as cp
-    import numpy as np
-    
-    # Datos históricos de inversiones y conversiones para cada canal (ejemplo ficticio)
-    historical_investments = np.array([50000, 30000, 20000])  # Inversiones en Google Ads, Facebook Ads, Twitter Ads
-    historical_conversions = np.array([100, 50, 30])  # Conversiones atribuibles a cada canal
-    
-    # Parámetros de las curvas de respuesta
-    alphas = np.array([-9453.72, -8312.84, -7371.33])
-    betas = np.array([8256.21, 7764.20, 7953.36])
-    
-    # Presupuesto total disponible
-    total_budget = 100000
-    
-    # Variables de decisión (presupuesto asignado a cada canal)
-    google_budget = cp.Variable(pos=True)
-    facebook_budget = cp.Variable(pos=True)
-    twitter_budget = cp.Variable(pos=True)
-    
-    # Restricción de presupuesto total
-    budget_constraint = [google_budget + facebook_budget + twitter_budget <= total_budget]
-    
-    #Graficar la curva de respuesta de cada canal
-    
-    import matplotlib.pyplot as plt
-    
-    # Plot the response curves
-    x = np.linspace(0, 100000, 100000)
-    
-    fig = plt.figure(figsize=(10, 5), dpi=300)
-    plt.plot(x, alphas[0] + betas[0] * np.log(x), color='red', label='Google Ads')
-    plt.plot(x, alphas[1] + betas[1] * np.log(x), color='blue', label='Facebook Ads')
-    plt.plot(x, alphas[2] + betas[2] * np.log(x), color='green', label='Twitter Ads')
-    plt.xlabel('Budget ($)')
-    plt.ylabel('Returns ($)') 
-    plt.legend()
-    plt.show()
-    
-    # Función objetivo: Maximizar el ROI
-    roi = (
-        alphas[0] + betas[0] * cp.log(google_budget) +
-        alphas[1] + betas[1] * cp.log(facebook_budget) +
-        alphas[2] + betas[2] * cp.log(twitter_budget)
-    )
-    objective = cp.Maximize(roi)
-    
-    # Crear el problema de optimización
-    problem = cp.Problem(objective, budget_constraint)
-    
-    # Resolver el problema
-    problem.solve(solver=cp.ECOS)
-    
-    # Resultados
-    if problem.status == cp.OPTIMAL:
-        optimal_google_budget = google_budget.value
-        optimal_facebook_budget = facebook_budget.value
-        optimal_twitter_budget = twitter_budget.value
-        optimal_roi = roi.value
-        print("Presupuesto Óptimo:")
-        print(f"Google Ads: ${optimal_google_budget:.2f}")
-        print(f"Facebook Ads: ${optimal_facebook_budget:.2f}")
-        print(f"Twitter Ads: ${optimal_twitter_budget:.2f}")
-        print(f"ROI Óptimo: {optimal_roi:.2f}")
-    else:
-    print("No se pudo encontrar una solución óptima.")
+El objetivo es maximizar el retorno de inversión (ROI) para la publicidad en estas tres webs.
 
 
 
+# Variables del problema
+
+historical_investments: Matriz que contiene las inversiones históricas en publicidad para cada canal (Google Ads, Facebook Ads, Twitter Ads) para los productos (mesa, silla, lámpara).
+historical_conversions: Matriz que contiene las conversiones atribuibles a cada canal para los productos.
+Parámetros de las Curvas de Respuesta:
+
+alphas: Vector que contiene los valores alfa para las curvas de respuesta de cada canal.
+betas: Vector que contiene los valores beta para las curvas de respuesta de cada canal.
+Presupuesto Total Disponible:
+
+total_budget: Presupuesto total disponible para la campaña publicitaria.
+Variables de Decisión:
+
+google_budget, facebook_budget, twitter_budget: Variables que representan el presupuesto asignado a cada canal respectivamente. Estas variables son positivas, lo que significa que no se permite un presupuesto negativo.
+Restricción del Presupuesto Total:
+
+budget_constraint: Lista que contiene la restricción que asegura que la suma del presupuesto asignado a cada canal no exceda el presupuesto total disponible.
+Función Objetivo (ROI):
+
+roi: La función objetivo representa el retorno de inversión (ROI) total esperado. Utiliza las curvas de respuesta (alfa y beta) para cada canal y las conversiones históricas para calcular el ROI total.
+Creación del Problema de Optimización:
+
+problem: Se crea el problema de optimización especificando la función objetivo que se desea maximizar y las restricciones que se deben cumplir.
+Resolución del Problema:
+
+Se utiliza el solver ECOS para resolver el problema de optimización y encontrar los valores óptimos de google_budget, facebook_budget, y twitter_budget.
+Resultados:
+
+Se verifica si se encontró una solución óptima (cp.OPTIMAL). Si es así, se imprime el presupuesto óptimo asignado a cada canal y el ROI óptimo. Si no se encuentra una solución óptima, se imprime un mensaje indicando que no se pudo encontrar una solución óptima.
+
+# CÓDIGO DEL PROBLEMA
+
+        import cvxpy as cp
+        import numpy as np
+        
+        # Datos históricos para cada canal (Google Ads, Facebook Ads, Twitter Ads) en la Universidad UAX
+        historical_investments = np.array([[40000, 30000, 30000]])  # Inversiones en Google Ads, Facebook Ads, Twitter Ads
+        historical_conversions = np.array([[80, 60, 50]])  # Conversiones atribuibles a cada canal
+        
+        # Parámetros de las curvas de respuesta (asumiendo valores similares a los del problema original)
+        alphas = np.array([-9453.72, -8312.84, -7371.33])
+        betas = np.array([8256.21, 7764.20, 7953.36])
+        
+        # Presupuesto total disponible
+        total_budget = 100000
+        
+        # Variables de decisión (presupuesto asignado a cada canal para la Universidad UAX)
+        google_budget = cp.Variable(pos=True)
+        facebook_budget = cp.Variable(pos=True)
+        twitter_budget = cp.Variable(pos=True)
+        
+        # Restricción de presupuesto total
+        budget_constraint = [google_budget + facebook_budget + twitter_budget <= total_budget]
+        
+        # Función objetivo: Maximizar el ROI para la Universidad UAX
+        roi = (
+            (alphas[0] + betas[0] * cp.log(google_budget)) * historical_conversions[0, 0] +
+            (alphas[1] + betas[1] * cp.log(facebook_budget)) * historical_conversions[0, 1] +
+            (alphas[2] + betas[2] * cp.log(twitter_budget)) * historical_conversions[0, 2]
+        )
+        objective = cp.Maximize(roi)
+        
+        # Crear el problema de optimización
+        problem = cp.Problem(objective, budget_constraint)
+        
+        # Resolver el problema
+        problem.solve(solver=cp.ECOS)
+        
+        # Resultados
+        if problem.status == cp.OPTIMAL:
+            optimal_google_budget = google_budget.value
+            optimal_facebook_budget = facebook_budget.value
+            optimal_twitter_budget = twitter_budget.value
+            optimal_roi = roi.value
+            print("Presupuesto Óptimo para la Universidad UAX:")
+            print(f"Google Ads: ${optimal_google_budget:.2f}")
+            print(f"Facebook Ads: ${optimal_facebook_budget:.2f}")
+            print(f"Twitter Ads: ${optimal_twitter_budget:.2f}")
+            print(f"ROI Óptimo: {optimal_roi:.2f}")
+        else:
+            print("No se pudo encontrar una solución óptima para la Universidad UAX.")
 
 
+# OUTPUT
 
+Presupuesto Óptimo para la Universidad UAX:
 
+Google Ads: $43339.19
+
+Facebook Ads: $30567.40
+
+Twitter Ads: $26093.
+
+ROI Óptimo: 14283600.87
