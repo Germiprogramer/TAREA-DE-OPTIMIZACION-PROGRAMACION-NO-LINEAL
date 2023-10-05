@@ -58,7 +58,7 @@ Resultados:
 
 Se verifica si se encontró una solución óptima (cp.OPTIMAL). Si es así, se imprime el presupuesto óptimo asignado a cada canal y el ROI óptimo. Si no se encuentra una solución óptima, se imprime un mensaje indicando que no se pudo encontrar una solución óptima.
 
-# CÓDIGO DEL PROBLEMA
+# Código del problema
 
         import cvxpy as cp
         import numpy as np
@@ -111,7 +111,7 @@ Se verifica si se encontró una solución óptima (cp.OPTIMAL). Si es así, se i
             print("No se pudo encontrar una solución óptima para la Universidad UAX.")
 
 
-# OUTPUT
+# Output
 
 Presupuesto Óptimo para la Universidad UAX:
 
