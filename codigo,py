@@ -1,18 +1,18 @@
 import cvxpy as cp
 import numpy as np
 
-# Datos históricos de inversiones y conversiones para cada canal (ejemplo ficticio)
-historical_investments = np.array([50000, 30000, 20000])  # Inversiones en Google Ads, Facebook Ads, Twitter Ads
-historical_conversions = np.array([100, 50, 30])  # Conversiones atribuibles a cada canal
+# Datos históricos para cada canal (Google Ads, Facebook Ads, Twitter Ads) en la Universidad UAX
+historical_investments = np.array([[40000, 30000, 30000]])  # Inversiones en Google Ads, Facebook Ads, Twitter Ads
+historical_conversions = np.array([[80, 60, 50]])  # Conversiones atribuibles a cada canal
 
-# Parámetros de las curvas de respuesta
+# Parámetros de las curvas de respuesta (asumiendo valores similares a los del problema original)
 alphas = np.array([-9453.72, -8312.84, -7371.33])
 betas = np.array([8256.21, 7764.20, 7953.36])
 
 # Presupuesto total disponible
 total_budget = 100000
 
-# Variables de decisión (presupuesto asignado a cada canal)
+# Variables de decisión (presupuesto asignado a cada canal para la Universidad UAX)
 google_budget = cp.Variable(pos=True)
 facebook_budget = cp.Variable(pos=True)
 twitter_budget = cp.Variable(pos=True)
@@ -20,27 +20,11 @@ twitter_budget = cp.Variable(pos=True)
 # Restricción de presupuesto total
 budget_constraint = [google_budget + facebook_budget + twitter_budget <= total_budget]
 
-#Graficar la curva de respuesta de cada canal
-
-import matplotlib.pyplot as plt
-
-# Plot the response curves
-x = np.linspace(0, 100000, 100000)
-
-fig = plt.figure(figsize=(10, 5), dpi=300)
-plt.plot(x, alphas[0] + betas[0] * np.log(x), color='red', label='Google Ads')
-plt.plot(x, alphas[1] + betas[1] * np.log(x), color='blue', label='Facebook Ads')
-plt.plot(x, alphas[2] + betas[2] * np.log(x), color='green', label='Twitter Ads')
-plt.xlabel('Budget ($)')
-plt.ylabel('Returns ($)') 
-plt.legend()
-plt.show()
-
-# Función objetivo: Maximizar el ROI
+# Función objetivo: Maximizar el ROI para la Universidad UAX
 roi = (
-    alphas[0] + betas[0] * cp.log(google_budget) +
-    alphas[1] + betas[1] * cp.log(facebook_budget) +
-    alphas[2] + betas[2] * cp.log(twitter_budget)
+    (alphas[0] + betas[0] * cp.log(google_budget)) * historical_conversions[0, 0] +
+    (alphas[1] + betas[1] * cp.log(facebook_budget)) * historical_conversions[0, 1] +
+    (alphas[2] + betas[2] * cp.log(twitter_budget)) * historical_conversions[0, 2]
 )
 objective = cp.Maximize(roi)
 
@@ -56,11 +40,10 @@ if problem.status == cp.OPTIMAL:
     optimal_facebook_budget = facebook_budget.value
     optimal_twitter_budget = twitter_budget.value
     optimal_roi = roi.value
-    print("Presupuesto Óptimo:")
+    print("Presupuesto Óptimo para la Universidad UAX:")
     print(f"Google Ads: ${optimal_google_budget:.2f}")
     print(f"Facebook Ads: ${optimal_facebook_budget:.2f}")
     print(f"Twitter Ads: ${optimal_twitter_budget:.2f}")
     print(f"ROI Óptimo: {optimal_roi:.2f}")
 else:
-    print("No se pudo encontrar una solución óptima.")
-
+    print("No se pudo encontrar una solución óptima para la Universidad UAX.")
