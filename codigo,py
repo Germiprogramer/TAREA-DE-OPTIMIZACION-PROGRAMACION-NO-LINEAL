@@ -47,3 +47,33 @@ if problem.status == cp.OPTIMAL:
     print(f"ROI Óptimo: {optimal_roi:.2f}")
 else:
     print("No se pudo encontrar una solución óptima para la Universidad UAX.")
+
+
+
+import cvxpy as cp
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+
+# Rango de presupuestos para las curvas de respuesta
+budget_range = np.linspace(0, total_budget, 1000)
+
+# Calcular las curvas de respuesta para cada canal
+google_curve = alphas[0] + betas[0] * np.log(budget_range)
+facebook_curve = alphas[1] + betas[1] * np.log(budget_range)
+twitter_curve = alphas[2] + betas[2] * np.log(budget_range)
+
+# Trazar las curvas de respuesta
+plt.figure(figsize=(8, 6))
+plt.plot(budget_range, google_curve, label='Google Ads')
+plt.plot(budget_range, facebook_curve, label='Facebook Ads')
+plt.plot(budget_range, twitter_curve, label='Twitter Ads')
+plt.xlabel('Presupuesto')
+plt.ylabel('Conversiones Atribuibles')
+plt.title('Curvas de Respuesta de Marketing')
+plt.legend()
+plt.grid(True)
+plt.show()
+plt.savefig('curvas.png')
+
